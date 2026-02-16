@@ -20,6 +20,7 @@
                     <a href="/users/update/{{ $user->id }}">Modifica</a>
                     <form method="POST" action="/users/delete/{{ $user->id }}">
                         <input type="hidden" name="_method" value="delete" />
+                        @csrf
                         <button>Elimina</button>
                     </form>
                 </td>
