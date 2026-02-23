@@ -7,9 +7,44 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
         //recupero lista utenti dal database
-        $users = User::get();
+        $users = User::where(function($query) use ($request){
+                if($request->input('search_name')){
+                    $query->where('name', 'LIKE', '%'.$request->input('search_name').'%');
+                }
+                if($request->input('search_email')){
+                    $query->where('email', 'LIKE', '%'.$request->input('search_email').'%');
+                }
+            })
+            ->get();
+            /*
+        if($request->input('search_name') || $request->input('search_email')){
+            
+            //ricerca con where name = ?
+            //$users = User::where('name', '=', $request->input('search'))
+            //->get();
+            
+            
+            
+            //where con 2 parametri
+            //$users = User::where('name', $request->input('search'))
+            //->get();
+            
+             //ricerca con where like
+            $users = User::where(function($query){
+                if($request->input('search_name')){
+                    $query->where('name', 'LIKE', $request->input('search_name'));
+                }
+                if($request->input('search_email')){
+                    $query->orWhere('email', 'LIKE', $request->input('search'));
+                }
+            })
+            ->get();
+        }else{
+            $users = User::get();
+        }
+        */
         /*
         //creo un array e inserisco due utenti hard coded
         $users = [];
