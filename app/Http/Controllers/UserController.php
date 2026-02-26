@@ -129,6 +129,23 @@ class UserController extends Controller
         $user = User::find($id);
         $user->name = $request->input('name');
         $user->email = $request->input('email');
+        $user->city_id = $request->input('city_id');
+        //attach inserisce nella tabella pivot 
+        // senza tenere conto di quello che c'è già
+        //$user->roles()->attach($request->input('role_id'));
+        //sync inserisce o toglie dalla tabella pivot per mantenere solo le righe con id indicati
+        //senza ulteriori campi nella tabella pivot basta un array di id
+        //$user->roles()->sync($request->input('role_id'));
+        //con altri campi invece deve essere un array chiave ID , valore array di proprietà, ad esempio enabled => 1
+        [
+            1 => [
+                'enabled' => 1
+            ],
+            2 => 
+            [
+                'enabled' => 0
+            ]
+        ]
         $user->save();
         return redirect('/users');
     }
