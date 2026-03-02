@@ -25,7 +25,11 @@
                 <td>{{$user->name}}</td>
                 <td>{{$user->email}}</td>
                 <td>{{$user->city->name ?? 'N.D.'}}</td>
-                <td>{{$user->roles->pluck('name')->join(', ')}}</td>
+                <td>
+                    @foreach($user->roles->pluck('pivot.enabled', 'name') as $roleName => $roleEnabled)
+                    {{$roleName}}:{{$roleEnabled}}<br>
+                    @endforeach
+                </td>
                 <td>
                     <a href="/users/update/{{ $user->id }}">Modifica</a>
                     <form method="POST" action="/users/delete/{{ $user->id }}">

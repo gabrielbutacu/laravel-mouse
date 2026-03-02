@@ -33,20 +33,54 @@
         type="checkbox" 
         value="{{$role->id}}" 
         name="role_id[]"
+        class="role-id"
+        id="role_id_{{$role->id}}"
         {{in_array($role->id, $user->roles->pluck('id')->toArray()) ? 'checked' : ''}}
         />
-        <label>{{$role->name}}</label>
+        <label>{{$role->id.': '.$role->name}}</label>
 
-        <input type="checkbox" value="{{$role->id}}" name="role_enabled[]" />
+        <input 
+            type="checkbox" 
+            value="{{$role->id}}" 
+            name="role_enabled[]" 
+            id="role_enabled_{{$role->id}}"
+            {{ $user->roles->find($role->id) && $user->roles->find($role->id)->pivot->enabled ? 'checked' : '' }}
+            />
         <label>attivo</label>
     @endforeach
 <br>
-
-
-
-
-
-
-
     <button>Invia</button>
 </form>
+
+<script>
+/*
+    document.getElementById("role_id_1").addEventListener('change', function(){
+        console.log("on change");
+        let checked = document.getElementById('role_id_1').checked;
+        if(checked){
+            document.getElementById("role_enabled_1").removeAttribute("disabled");
+        }else{
+            document.getElementById("role_enabled_1").setAttribute("disabled", true);
+        }
+    });
+*/
+
+let roleIdLength = document.getElementsByClassName("role-id").length;
+for(let i=0; i < roleIdLength; i++){
+    let roleIdInput = document.getElementsByClassName("role-id")[i];
+    roleIdInput.addEventListener('change', function(){
+        console.log("on change");
+        let checked = roleIdInput.checked;
+        //split genera un array dividendo la stringa tante volte quante volte trova il carattere _
+        //let roleId = roleIdInput.id.split('_')[2];
+        let roleId = roleIdInput.id.substr(8);
+        console.log("roleId: ", roleId);
+        if(checked){
+            document.getElementById("role_enabled_"+roleId).removeAttribute("disabled");
+        }else{
+            document.getElementById("role_enabled_"+roleId).setAttribute("disabled", true);
+        }
+    });
+}
+
+</script>
