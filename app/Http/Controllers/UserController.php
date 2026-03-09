@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\WelcomeMail;
 
 class UserController extends Controller
 {
@@ -96,12 +98,15 @@ class UserController extends Controller
     }
 
     public function save(Request $request){
+
         $user = new User();
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->password = 'password';
         $user->save();
-
+        //metodo send manda la mail in modalità sincrona
+        //Mail::send(new WelcomeMail($user->id));
+        Mail::queue(new WelcomeMail($user->id));
         return redirect('/users');
 
     }
